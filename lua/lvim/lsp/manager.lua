@@ -62,7 +62,7 @@ local function client_is_configured(server_name, ft)
   ft = ft or vim.bo.filetype
   local active_autocmds = vim.api.nvim_get_autocmds { event = "FileType", pattern = ft }
   for _, result in ipairs(active_autocmds) do
-    if result.command:match(server_name) then
+    if result.desc ~= nil and result.desc:match("server " .. server_name .. " ") then
       Log:debug(string.format("[%q] is already configured", server_name))
       return true
     end
@@ -119,10 +119,10 @@ function M.setup(server_name, user_config)
           end)
         end
       end)
-      return
     else
       Log:debug(server_name .. " is not managed by the automatic installer")
     end
+    return
   end
 
   local config = resolve_config(server_name, resolve_mason_config(server_name), user_config)

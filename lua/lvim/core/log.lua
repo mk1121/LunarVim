@@ -20,8 +20,6 @@ function Log:set_level(level)
     for _, s in ipairs(logger.sinks) do
       s.level = log_level
     end
-  else
-    vim.notify_once("Unable to set logger's level to " .. level)
   end
 
   local packer_ok, _ = xpcall(function()
@@ -88,7 +86,7 @@ function Log:init()
         vim_log_level = vim_log_level + 1
       end
 
-      self:info(vim_log_level, msg)
+      self:add_entry(vim_log_level, msg)
     end
   end
 
